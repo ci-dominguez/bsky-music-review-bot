@@ -1,0 +1,23 @@
+{
+  "name": "bsky-music-recommendation-bot",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "ts-node src/index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@atproto/api": "^0.13.18",
+    "axios": "^1.7.8",
+    "dotenv": "^16.4.7",
+    "rss-parser": "^3.13.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.1",
+    "typescript": "^5.7.2"
+  }
+}
