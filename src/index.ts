@@ -8,7 +8,7 @@ const startBot = async () => {
 
   //6am, 2pm, and 4pm pst every day
   cron.schedule(
-    '30 10,14,16 * * *',
+    '35 10,14,16 * * *',
     async () => {
       await fetchAndProcessReviews();
     },
