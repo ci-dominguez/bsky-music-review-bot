@@ -26,6 +26,7 @@ RUN npm ci
 
 # Copy application code
 COPY . .
+RUN npm run build 
 
 
 # Final stage for app image
@@ -36,4 +37,4 @@ COPY --from=build /app /app
 
 # Start the server by default, this can be overwritten at runtime
 EXPOSE 3000
-CMD [ "npm", "run", "start" ]
+CMD ["node", "dist/index.js"]
