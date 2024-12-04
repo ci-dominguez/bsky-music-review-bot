@@ -1,6 +1,6 @@
 # 🎵 Bluesky Music Review Bot
 
-[Mar](https://bsky.app/profile/mar.xinthem.com) is a bot designed for [Bluesky](https://bsky.app). In short, it monitors album and track review rss feeds by [Pitchfork](https://pitchfork.com/info/rss/) and posts them to Bluesky on a schedule (6am, 2pm, and 4pm PST) using node-cron. It also stores the reviews, spotify links, and post links in a postgreSQL database.
+[Mar](https://bsky.app/profile/mar.xinthem.com) is a bot designed for [Bluesky](https://bsky.app). In short, it monitors album and track review rss feeds by [Pitchfork](https://pitchfork.com/info/rss/) and posts them to Bluesky on a schedule (6am, 2pm, and 4pm PST) using node-cron. It also stores the reviews, spotify links, and post links in a postgreSQL database. The bot is currently deployed on [fly.io](https://fly.io).
 
 ## Made with some really cool tools 👇
 
