@@ -1,13 +1,4 @@
-import {
-  pgTable,
-  serial,
-  varchar,
-  text,
-  boolean,
-  timestamp,
-  integer,
-  jsonb,
-} from 'drizzle-orm/pg-core';
+import { pgTable, serial, varchar, text, timestamp } from 'drizzle-orm/pg-core';
 
 export const reviews = pgTable('mar_reviews', {
   id: serial('id').primaryKey(),
