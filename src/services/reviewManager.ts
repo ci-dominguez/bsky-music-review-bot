@@ -1,5 +1,5 @@
 import { db } from '../db/db';
-import { asc, eq } from 'drizzle-orm';
+import { eq, asc } from 'drizzle-orm';
 import { reviews } from '../db/schema';
 import { Review } from '../interfaces';
 
@@ -17,7 +17,7 @@ export const getAllGuids = async (): Promise<string[]> => {
   }
 };
 
-export const storeAndGetReview = async (review: Review): Promise<number> => {
+export const storeAndGetReviewId = async (review: Review): Promise<number> => {
   try {
     const [newReview] = await db
       .insert(reviews)
