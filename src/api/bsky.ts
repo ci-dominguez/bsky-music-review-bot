@@ -1,5 +1,6 @@
-import { AtpAgent } from '@atproto/api';
+import { AtpAgent, RichText } from '@atproto/api';
 import * as dotenv from 'dotenv';
+import { Review } from '../interfaces';
 
 dotenv.config();
 
@@ -23,10 +24,51 @@ export const LoginToBSky = async (): Promise<AtpAgent> => {
   }
 };
 
-export const getAgent = async (): Promise<AtpAgent> => {
+const getAgent = async (): Promise<AtpAgent> => {
   if (!agent) {
     console.warn('Agent not initialized. Logging in again...');
     return await LoginToBSky();
   }
   return agent;
+};
+
+export const postReview = async (review: Review): Promise<string> => {
+  try {
+    const agent = await getAgent();
+
+    const rt = new RichText({
+      text: `${review.description} ${review.link}`,
+    });
+
+    await rt.detectFacets(agent);
+
+    const resp = await agent.post({
+      $type: 'app.bsky.feed.post',
+      text: rt.text,
+      facets: rt.facets,
+      createdAt: new Date().toISOString(),
+      embed: {
+        $type: 'app.bsky.embed.external',
+        external: {
+          uri: review.link,
+          title: review.title,
+          description: review.description,
+          thumb: review.thumbnailUrl,
+        },
+      },
+    });
+
+    const uriParts = resp.uri.split('/');
+    const user = uriParts[2];
+    const postId = uriParts[4];
+
+    console.log(
+      `Review posted successfully: https://bsky.app/profile/${user}/post/${postId}`
+    );
+
+    return `https://bsky.app/profile/${user}/post/${postId}`;
+  } catch (error: any) {
+    console.error('Failed to post review:', error);
+    throw error;
+  }
 };
