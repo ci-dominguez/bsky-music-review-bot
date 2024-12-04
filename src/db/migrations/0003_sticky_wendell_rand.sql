@@ -1,0 +1,1 @@
+ALTER TABLE "mar_reviews" ALTER COLUMN "category" DROP NOT NULL;
