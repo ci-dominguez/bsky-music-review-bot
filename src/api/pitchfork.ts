@@ -9,10 +9,7 @@ export const fetchRSSFeed = async (url: string): Promise<Review[]> => {
       explicitArray: false,
     });
 
-    console.log('RSS Data:', data.rss.channel.item);
-
-    console.log('Fetched Review:', data.rss.channel.item[0]);
-    console.log('Img URL:', data.rss.channel.item[0]['media:thumbnail'].$.url);
+    // console.log('RSS Data:', data.rss.channel.item);
 
     const items = data.rss.channel.item;
 
