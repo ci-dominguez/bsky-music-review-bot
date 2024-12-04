@@ -53,7 +53,6 @@ export const postReview = async (review: Review): Promise<string> => {
           uri: review.link,
           title: review.title,
           description: review.description,
-          thumb: review.thumbnailUrl,
         },
       },
     });
