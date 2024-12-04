@@ -4,6 +4,9 @@
   "main": "index.js",
   "scripts": {
     "start": "ts-node src/index.ts",
+    "db:generate": "drizzle-kit generate --config=./drizzle.config.ts",
+    "db:migrate": "drizzle-kit migrate --config=./drizzle.config.ts",
+    "db:push": "drizzle-kit push --config=./drizzle.config.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -14,12 +17,16 @@
     "@atproto/api": "^0.13.18",
     "axios": "^1.7.8",
     "dotenv": "^16.4.7",
+    "drizzle-kit": "^0.29.0",
+    "drizzle-orm": "^0.37.0",
     "node-cron": "^3.0.3",
+    "pg": "^8.13.1",
     "xml2js": "^0.6.2"
   },
   "devDependencies": {
     "@types/node": "^22.10.1",
     "@types/node-cron": "^3.0.11",
+    "@types/pg": "^8.11.10",
     "@types/xml2js": "^0.4.14",
     "typescript": "^5.7.2"
   }
