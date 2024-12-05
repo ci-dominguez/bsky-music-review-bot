@@ -9,7 +9,7 @@ export const fetchRSSFeed = async (url: string): Promise<Review[]> => {
       explicitArray: false,
     });
 
-    // console.log('RSS Data:', data.rss.channel.item);
+    console.log('RSS Data:', data.rss.channel.item);
 
     const items = data.rss.channel.item;
 
@@ -17,6 +17,7 @@ export const fetchRSSFeed = async (url: string): Promise<Review[]> => {
       title: item.title,
       link: item.link,
       guid: item.guid._,
+      category: item.category === 'Reviews / Albums' ? 'Album' : 'Track',
       description: item.description,
       thumbnailUrl: item['media:thumbnail'].$.url,
       publishedDate: new Date(item.pubDate),
