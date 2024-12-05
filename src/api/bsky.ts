@@ -37,7 +37,9 @@ export const postReview = async (review: Review): Promise<string> => {
     const agent = await getAgent();
 
     const rt = new RichText({
-      text: `${review.description} ${review.link}`,
+      text: `${review.description}\n\nFull review: ${
+        review.link
+      }\nListen on Spotify: ${review.spotifyLink || 'N/A'}`,
     });
 
     await rt.detectFacets(agent);
