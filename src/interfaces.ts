@@ -1,4 +1,5 @@
 export interface Review {
+  id?: number;
   guid: string;
   title: string;
   description: string;
@@ -7,6 +8,7 @@ export interface Review {
   thumbnailUrl: string;
   spotifyLink?: string;
   publishedDate: Date;
+  isPosted: boolean;
 }
 
 export interface SpotifyTokens {
