@@ -3,16 +3,41 @@ import { eq, asc } from 'drizzle-orm';
 import { reviews } from '../db/schema';
 import { Review } from '../interfaces';
 
-export const getAllGuids = async (): Promise<string[]> => {
+export const getAllReviews = async (): Promise<Review[]> => {
   try {
-    const guids = await db
-      .select({ guid: reviews.guid })
+    const allReviews = await db
+      .select()
       .from(reviews)
       .orderBy(asc(reviews.publishedDate));
 
-    return guids.map((guid) => guid.guid);
+    return allReviews.map((review) => review) as Review[];
   } catch (error) {
-    console.error('Error getting guids:', error);
+    console.error('Error getting reviews:', error);
+    throw error;
+  }
+};
+
+export const getReviewByGuid = async (guid: string): Promise<Review> => {
+  try {
+    const review = await db
+      .select({
+        id: reviews.id,
+        guid: reviews.guid,
+        title: reviews.title,
+        description: reviews.description,
+        link: reviews.link,
+        category: reviews.category,
+        thumbnailUrl: reviews.thumbnailUrl,
+        publishedDate: reviews.publishedDate,
+        isPosted: reviews.isPosted,
+      })
+      .from(reviews)
+      .where(eq(reviews.guid, guid))
+      .limit(1);
+
+    return review[0] as Review;
+  } catch (error) {
+    console.error('Error getting review:', error);
     throw error;
   }
 };
@@ -26,6 +51,7 @@ export const storeAndGetReviewId = async (review: Review): Promise<number> => {
         title: review.title,
         description: review.description,
         link: review.link,
+        category: review.category,
         thumbnailUrl: review.thumbnailUrl,
         publishedDate: review.publishedDate,
       })
@@ -45,7 +71,7 @@ export const updateReviewWithPostUrl = async (
   try {
     await db
       .update(reviews)
-      .set({ bskyPostUrl: postUrl, updatedAt: new Date() })
+      .set({ bskyPostUrl: postUrl, isPosted: true, updatedAt: new Date() })
       .where(eq(reviews.id, reviewId));
   } catch (error) {
     console.error('Error updating review with post url:', error);
