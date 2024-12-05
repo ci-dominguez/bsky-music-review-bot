@@ -32,14 +32,17 @@ const getAgent = async (): Promise<AtpAgent> => {
   return agent;
 };
 
-export const postReview = async (review: Review): Promise<string> => {
+export const postReview = async (
+  review: Review,
+  spotifyLink: string
+): Promise<string> => {
   try {
     const agent = await getAgent();
 
     const rt = new RichText({
       text: `${review.description}\n\nFull review: ${
         review.link
-      }\nListen on Spotify: ${review.spotifyLink || 'N/A'}`,
+      }\nListen on Spotify: ${spotifyLink || 'N/A'}`,
     });
 
     await rt.detectFacets(agent);
