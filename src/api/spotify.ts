@@ -60,11 +60,31 @@ export const refreshAccessTokenIfNeeded = async () => {
   }
 };
 
-export const getTrackOrAlbumLink = async (): Promise<string> => {
-  return '';
+export const getTrackOrAlbumLink = async (
+  query: string,
+  type: 'Album' | 'Track'
+): Promise<string> => {
+  await refreshAccessTokenIfNeeded();
+
+  try {
+    const searchResp = await spotifyApi.searchTracks(query);
+
+    let url =
+      type === 'Album'
+        ? searchResp.body.tracks?.items[0].album.external_urls.spotify
+        : searchResp.body.tracks?.items[0].external_urls.spotify;
+
+    if (!url) url = 'N/A';
+
+    console.log('Spotify url for review:', url);
+    return url;
+  } catch (error) {
+    console.error('Error fetching spotify url:', error);
+    throw error;
+  }
 };
 
-//Initial code to get auth url + access code from spotify
+// Initial code to get auth url + access code from spotify
 // const authURL = spotifyApi.createAuthorizeURL(
 //   ['playlist-modify-public'],
 //   'state-key'

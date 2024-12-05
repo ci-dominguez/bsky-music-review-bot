@@ -1,10 +1,12 @@
 import { postReview } from '../api/bsky';
 import { fetchRSSFeed } from '../api/pitchfork';
+import { getTrackOrAlbumLink } from '../api/spotify';
 import {
   getAllReviews,
   getReviewByGuid,
   storeAndGetReviewId,
   updateReviewWithPostUrl,
+  updateReviewWithSpotifyLink,
 } from './reviewManager';
 
 const TRACKS_RSS_URL = 'https://pitchfork.com/feed/feed-track-reviews/rss';
@@ -49,18 +51,29 @@ export const fetchAndProcessReviews = async () => {
           reviews[reviews.length - 1].guid
         );
 
-        //TODO: fetch and store spotify URL for review subject
+        //Fetch and store spotify URL for song/album
+        const query = extractQuery(newestReview.link);
+        const spotifyUrl = await getTrackOrAlbumLink(
+          query,
+          newestReview.category
+        );
+        await updateReviewWithSpotifyLink(newestReview.id!, spotifyUrl);
 
-        const postUrl = await postReview(newestReview);
+        // Post review
+        const postUrl = await postReview(newestReview, spotifyUrl);
         await updateReviewWithPostUrl(newestReview.id!, postUrl);
       }
     } else {
       //Post newest stored review
       for (const review of storedReviews) {
         if (!review.isPosted) {
-          //TODO: fetch and store spotify URL for review subject
+          //Fetch and store spotify URL for song/album
+          const query = extractQuery(review.link);
+          const spotifyUrl = await getTrackOrAlbumLink(query, review.category);
+          await updateReviewWithSpotifyLink(review.id!, spotifyUrl);
 
-          const postUrl = await postReview(review);
+          // Post review
+          const postUrl = await postReview(review, spotifyUrl);
           await updateReviewWithPostUrl(review.id!, postUrl);
           break;
         }
@@ -70,4 +83,9 @@ export const fetchAndProcessReviews = async () => {
     console.error('Error processing reviews:', error);
     throw error;
   }
+};
+
+const extractQuery = (text: string): string => {
+  const parts = text.split('/');
+  return parts[parts.length - 1];
 };
