@@ -39,11 +39,24 @@ export const postReview = async (
   try {
     const agent = await getAgent();
 
-    const rt = new RichText({
-      text: `${review.description}\n\nFull review: ${
-        review.link
-      }\nListen on Spotify: ${spotifyLink || 'N/A'}`,
+    let rt = new RichText({
+      text: `${review.description}\n\nFull review: ${review.link.slice(
+        9
+      )}\nListen on Spotify: ${spotifyLink.slice(9) || 'N/A'}`,
     });
+
+    // Shorten the post to 300 characters (post char limit) if needed
+    if (rt.length > 300) {
+      const charDiff = rt.text.length - 300;
+      rt = new RichText({
+        text: `${review.description.slice(
+          0,
+          review.description.length - (charDiff + 4)
+        )}...\n\nFull review: ${review.link.slice(9)}\nListen on Spotify: ${
+          spotifyLink.slice(9) || 'N/A'
+        }`,
+      });
+    }
 
     await rt.detectFacets(agent);
 
