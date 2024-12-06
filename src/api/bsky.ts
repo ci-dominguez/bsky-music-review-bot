@@ -1,4 +1,5 @@
 import { AtpAgent, RichText } from '@atproto/api';
+import sharp from 'sharp';
 import * as dotenv from 'dotenv';
 import { Review } from '../interfaces';
 
@@ -60,11 +61,29 @@ export const postReview = async (
 
     await rt.detectFacets(agent);
 
-    // Upload thumbnail as blob
-    const arrayBuffer = await fetch(review.thumbnailUrl).then((res) =>
-      res.arrayBuffer()
+    //Check and resize thumbnail if needed
+    const thumbResp = await fetch(review.thumbnailUrl);
+    const sizeInBytes = parseInt(
+      thumbResp.headers.get('content-length') || '0',
+      10
     );
-    const thumbResp = await agent.uploadBlob(new Uint8Array(arrayBuffer), {
+
+    let thumbBuffer;
+
+    // Check if resizing is necessary (976.56KB file size limit on bsky)
+    if (sizeInBytes > 976 * 1024) {
+      // Resize
+      const originalBuffer = await thumbResp.arrayBuffer();
+      thumbBuffer = await sharp(Buffer.from(originalBuffer))
+        .resize({ width: 800 })
+        .jpeg({ quality: 80 })
+        .toBuffer();
+    } else {
+      thumbBuffer = await thumbResp.arrayBuffer();
+    }
+
+    // Upload thumbnail as blob
+    const thumbBlobResp = await agent.uploadBlob(new Uint8Array(thumbBuffer), {
       encoding: 'image/jpeg',
     });
 
@@ -79,7 +98,7 @@ export const postReview = async (
           uri: review.link,
           title: review.title,
           description: review.description,
-          thumb: thumbResp.data.blob,
+          thumb: thumbBlobResp.data.blob,
         },
       },
     });
