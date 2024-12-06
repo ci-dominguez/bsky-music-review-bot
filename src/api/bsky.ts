@@ -41,8 +41,8 @@ export const postReview = async (
 
     let rt = new RichText({
       text: `${review.description}\n\nFull review: ${review.link.slice(
-        9
-      )}\nListen on Spotify: ${spotifyLink.slice(9) || 'N/A'}`,
+        8
+      )}\nListen on Spotify: ${spotifyLink.slice(8) || 'N/A'}`,
     });
 
     // Shorten the post to 300 characters (post char limit) if needed
@@ -52,8 +52,8 @@ export const postReview = async (
         text: `${review.description.slice(
           0,
           review.description.length - (charDiff + 4)
-        )}...\n\nFull review: ${review.link.slice(9)}\nListen on Spotify: ${
-          spotifyLink.slice(9) || 'N/A'
+        )}...\n\nFull review: ${review.link.slice(8)}\nListen on Spotify: ${
+          spotifyLink.slice(8) || 'N/A'
         }`,
       });
     }
