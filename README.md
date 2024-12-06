@@ -12,6 +12,7 @@
 - 💡 [Neon](https://neon.tech/)
 - 🎧 [Spotify Web Api](https://github.com/thelinmichael/spotify-web-api-node)
 - 🤖 [Node-cron](https://www.npmjs.com/package/node-cron)
+- 📸 [Sharp](https://github.com/lovell/sharp)
 - 🔰 [Xml2js](https://www.npmjs.com/package/xml2js)
 - 📰 [Pitchfork RSS Feeds](https://pitchfork.com/info/rss/)
 
