@@ -60,6 +60,14 @@ export const postReview = async (
 
     await rt.detectFacets(agent);
 
+    // Upload thumbnail as blob
+    const arrayBuffer = await fetch(review.thumbnailUrl).then((res) =>
+      res.arrayBuffer()
+    );
+    const thumbResp = await agent.uploadBlob(new Uint8Array(arrayBuffer), {
+      encoding: 'image/jpeg',
+    });
+
     const resp = await agent.post({
       $type: 'app.bsky.feed.post',
       text: rt.text,
@@ -71,6 +79,7 @@ export const postReview = async (
           uri: review.link,
           title: review.title,
           description: review.description,
+          thumb: thumbResp.data.blob,
         },
       },
     });
